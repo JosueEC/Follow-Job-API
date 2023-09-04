@@ -2,11 +2,13 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -43,5 +45,18 @@ export class UserService {
     }
 
     return userFound;
+  }
+
+  public async update(id: string, user: UpdateUserDto): Promise<User> {
+    await this.findOne(id);
+    const result = await this.userRepository.update(id, user);
+
+    if (result.affected === 0) {
+      throw new ServiceUnavailableException(
+        'Something went wrong, try it later',
+      );
+    }
+
+    return this.findOne(id);
   }
 }
