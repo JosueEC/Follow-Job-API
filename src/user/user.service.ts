@@ -63,4 +63,18 @@ export class UserService {
 
     return this.findOne(id);
   }
+
+  public async deleteOne(id: string): Promise<User> {
+    const userFound = await this.findOne(id);
+
+    const result = await this.userRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new ServiceUnavailableException(
+        'Something went wrong, try it later',
+      );
+    }
+
+    return userFound;
+  }
 }
