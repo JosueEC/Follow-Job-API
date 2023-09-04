@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   MaxLength,
   IsStrongPassword,
-} from 'class-validator/types/decorator/decorators';
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
