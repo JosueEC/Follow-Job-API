@@ -26,4 +26,8 @@ export class UserService {
     const userCreated = this.userRepository.create(user);
     return await this.userRepository.save(userCreated);
   }
+
+  public async findAll(): Promise<User[]> {
+    return this.userRepository.find();
+  }
 }
