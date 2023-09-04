@@ -5,12 +5,14 @@ import {
   MaxLength,
   IsStrongPassword,
 } from 'class-validator';
+import { IsEmailNotRegistered } from './custom-validators/is-email-not-registered';
 
 export class CreateUserDto {
   @IsEmail()
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
+  @IsEmailNotRegistered({ message: 'The email already exists bro' })
   email: string;
 
   @IsStrongPassword()
