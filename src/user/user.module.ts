@@ -9,6 +9,6 @@ import { IsEmailNotRegisteredConstraint } from './dto/custom-validators/is-email
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService, IsEmailNotRegisteredConstraint],
-  exports: [],
+  exports: [UserService],
 })
 export class UserModule {}

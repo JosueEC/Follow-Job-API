@@ -33,6 +33,10 @@ export class UserService {
     return await this.userRepository.save(userCreated);
   }
 
+  public async save(user: CreateUserDto): Promise<User> {
+    return await this.userRepository.save(user);
+  }
+
   public async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
