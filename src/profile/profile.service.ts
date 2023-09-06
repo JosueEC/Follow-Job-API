@@ -24,4 +24,8 @@ export class ProfileService {
 
     return profileSaved;
   }
+
+  public async findAll(): Promise<Profile[]> {
+    return this.profileRepository.find();
+  }
 }
