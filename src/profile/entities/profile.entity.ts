@@ -10,6 +10,4 @@ export class Profile {
 
   @Column({ name: 'profession', type: 'varchar', length: 300 })
   profession: string;
-  // occupation: Occupation;
-  // networks: Netkworks;
 }

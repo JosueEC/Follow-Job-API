@@ -1,8 +1,10 @@
+import { Occupation } from 'src/occupation/entities/occupation.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -21,4 +23,7 @@ export class User {
   @OneToOne(() => Profile)
   @JoinColumn()
   profile: Profile;
+
+  @OneToMany(() => Occupation, (occuapation) => occuapation.professional)
+  occupations: Occupation[];
 }
