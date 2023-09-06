@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -31,4 +32,9 @@ export class CreateOccupationDto {
   @MaxLength(12)
   @IsOptional()
   months_experience: number;
+
+  @IsUUID()
+  @IsString()
+  @IsNotEmpty()
+  professionalId: string;
 }
