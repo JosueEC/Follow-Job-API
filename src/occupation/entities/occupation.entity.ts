@@ -9,8 +9,21 @@ export class Occupation {
   @Column({ name: 'name', type: 'varchar', length: 300, unique: true })
   name: string;
 
-  @Column({ name: 'years_experience', type: 'smallint', nullable: true })
+  @Column({
+    name: 'years_experience',
+    type: 'smallint',
+    nullable: true,
+    default: 0,
+  })
   years_experience: number;
+
+  @Column({
+    name: 'months_experience',
+    type: 'smallint',
+    nullable: true,
+    default: 0,
+  })
+  months_experience: number;
 
   @Column({ name: 'professionalId', type: 'uuid' })
   professionalId: string;
