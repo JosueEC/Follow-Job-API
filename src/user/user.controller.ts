@@ -30,9 +30,12 @@ export class UserController {
   @Get()
   public async getAllUsers(
     @Query('addProfile') addProfile: boolean,
+    @Query('addOccupations') addOccupations: boolean,
   ): Promise<User[]> {
     if (addProfile) {
       return await this.userFiltersService.findAllAddProfile();
+    } else if (addOccupations) {
+      return await this.userFiltersService.findAllAddOccupations();
     }
     return await this.userService.findAll();
   }
