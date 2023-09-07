@@ -32,7 +32,9 @@ export class UserController {
     @Query('addProfile') addProfile: boolean,
     @Query('addOccupations') addOccupations: boolean,
   ): Promise<User[]> {
-    if (addProfile) {
+    if (addProfile && addOccupations) {
+      return this.userFiltersService.findAllAddRelations();
+    } else if (addProfile) {
       return await this.userFiltersService.findAllAddProfile();
     } else if (addOccupations) {
       return await this.userFiltersService.findAllAddOccupations();

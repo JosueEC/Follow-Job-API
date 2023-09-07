@@ -47,4 +47,21 @@ export class UserFiltersService {
       },
     });
   }
+
+  public async findAllAddRelations(): Promise<User[]> {
+    return await this.userRepository.find({
+      relations: ['profile', 'occupations'],
+      select: {
+        profile: {
+          name: true,
+          profession: true,
+        },
+        occupations: {
+          name: true,
+          years_experience: true,
+          months_experience: true,
+        },
+      },
+    });
+  }
 }
