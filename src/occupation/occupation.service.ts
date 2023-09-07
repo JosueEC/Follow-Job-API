@@ -25,4 +25,8 @@ export class OccupationService {
     const newOccupation = this.occupationRepository.create(occupationDto);
     return await this.occupationRepository.save(newOccupation);
   }
+
+  public async findAll(): Promise<Occupation[]> {
+    return await this.occupationRepository.find();
+  }
 }

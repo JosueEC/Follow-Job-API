@@ -1,4 +1,4 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import { Controller, Body, Post, Get } from '@nestjs/common';
 import { CreateOccupationDto } from './dto/create-occupation.dto';
 import { Occupation } from './entities/occupation.entity';
 import { OccupationService } from './occupation.service';
@@ -13,5 +13,10 @@ export class OccupationController {
     occupationDto: CreateOccupationDto,
   ): Promise<Occupation> {
     return await this.occupationService.create(occupationDto);
+  }
+
+  @Get()
+  public async findAllOccupations(): Promise<Occupation[]> {
+    return this.occupationService.findAll();
   }
 }
