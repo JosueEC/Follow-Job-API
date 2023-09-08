@@ -7,15 +7,20 @@ import {
   Patch,
   Delete,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserFiltersService } from './userFilters.service';
 
 @Controller('/v1/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userFiltersService: UserFiltersService,
+  ) {}
 
   @Post()
   public async createUser(@Body() user: CreateUserDto): Promise<User> {
@@ -23,8 +28,18 @@ export class UserController {
   }
 
   @Get()
-  public async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll();
+  public async getAllUsers(
+    @Query('addProfile') addProfile: boolean,
+    @Query('addOccupations') addOccupations: boolean,
+  ): Promise<User[]> {
+    if (addProfile && addOccupations) {
+      return this.userFiltersService.findAllAddRelations();
+    } else if (addProfile) {
+      return await this.userFiltersService.findAllAddProfile();
+    } else if (addOccupations) {
+      return await this.userFiltersService.findAllAddOccupations();
+    }
+    return await this.userService.findAll();
   }
 
   @Get(':id')

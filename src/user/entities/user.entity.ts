@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Occupation } from 'src/occupation/entities/occupation.entity';
+import { Profile } from 'src/profile/entities/profile.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User {
@@ -10,4 +19,11 @@ export class User {
 
   @Column({ name: 'password', type: 'varchar', length: '200' })
   password: string;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
+
+  @OneToMany(() => Occupation, (occuapation) => occuapation.professional)
+  occupations: Occupation[];
 }
