@@ -1,0 +1,6 @@
+export enum LevelSkill {
+  INTERMEDIATE = 'INTERMEDIATE',
+  BASIC = 'BASIC',
+  ADVANCED = 'ADVANCED',
+  EXPERT = 'EXPERT',
+}
