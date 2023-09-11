@@ -1,8 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Skill } from './entities';
 import { Repository } from 'typeorm';
-import { CreateSkillDto } from './dto';
+import { CreateSkillDto, UpdateSkillDto } from './dto';
 
 @Injectable()
 export class SkillService {
@@ -26,5 +30,16 @@ export class SkillService {
 
     const newSkill = this.skillRepository.create(skill);
     return this.skillRepository.save(newSkill);
+  }
+
+  public async update(skill: UpdateSkillDto): Promise<Skill> {
+    const skillExists = await this.skillRepository.findOneBy({ id: skill.id });
+
+    if (!skillExists) {
+      throw new NotFoundException('Skill not found :(');
+    }
+
+    await this.skillRepository.update(skill.id, skill);
+    return await this.skillRepository.findOneBy({ id: skill.id });
   }
 }

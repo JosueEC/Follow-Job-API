@@ -1,5 +1,5 @@
-import { Controller, Body, Post, Get } from '@nestjs/common';
-import { CreateSkillDto } from './dto';
+import { Controller, Body, Post, Get, Patch } from '@nestjs/common';
+import { CreateSkillDto, UpdateSkillDto } from './dto';
 import { SkillService } from './skill.service';
 import { Skill } from './entities';
 
@@ -15,5 +15,13 @@ export class SkillController {
   @Get()
   public async getAllSkills(): Promise<Skill[]> {
     return await this.skillService.findAll();
+  }
+
+  @Patch()
+  public async updateOneSkill(
+    @Body()
+    skill: UpdateSkillDto,
+  ): Promise<Skill> {
+    return await this.skillService.update(skill);
   }
 }
