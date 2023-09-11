@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Skill } from './entities';
@@ -41,5 +42,23 @@ export class SkillService {
 
     await this.skillRepository.update(skill.id, skill);
     return await this.skillRepository.findOneBy({ id: skill.id });
+  }
+
+  public async delete(id: number): Promise<Skill> {
+    const skillExists = await this.skillRepository.findOneBy({ id });
+
+    if (!skillExists) {
+      throw new NotFoundException('Skill not found :(');
+    }
+
+    const result = await this.skillRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new ServiceUnavailableException(
+        'Something went wrong, try it later',
+      );
+    }
+
+    return skillExists;
   }
 }

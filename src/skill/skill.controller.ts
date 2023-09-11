@@ -1,4 +1,14 @@
-import { Controller, Body, Post, Get, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
+  ParseIntPipe,
+  HttpCode,
+} from '@nestjs/common';
 import { CreateSkillDto, UpdateSkillDto } from './dto';
 import { SkillService } from './skill.service';
 import { Skill } from './entities';
@@ -23,5 +33,13 @@ export class SkillController {
     skill: UpdateSkillDto,
   ): Promise<Skill> {
     return await this.skillService.update(skill);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  public async deleteOneSkill(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Skill> {
+    return await this.skillService.delete(id);
   }
 }
