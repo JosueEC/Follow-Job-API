@@ -11,6 +11,10 @@ export class SkillService {
     private readonly skillRepository: Repository<Skill>,
   ) {}
 
+  public async findAll(): Promise<Skill[]> {
+    return await this.skillRepository.find();
+  }
+
   public async create(skill: CreateSkillDto): Promise<Skill> {
     const skillExists = await this.skillRepository.findOneBy({
       name: skill.name,
