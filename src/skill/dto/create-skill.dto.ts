@@ -1,11 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
-import { LevelSkill } from '../enums';
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateSkillDto {
   @IsString()
@@ -13,8 +6,4 @@ export class CreateSkillDto {
   @MinLength(3)
   @MaxLength(255)
   name: string;
-
-  @IsNotEmpty()
-  @IsEnum(LevelSkill)
-  level: LevelSkill;
 }
