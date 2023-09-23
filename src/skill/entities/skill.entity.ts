@@ -1,4 +1,4 @@
-import { Occupation } from 'src/occupation/entities/occupation.entity';
+import { Occupation } from '../../occupation/entities/occupation.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'skill' })

@@ -9,9 +9,9 @@ import {
   ParseIntPipe,
   HttpCode,
 } from '@nestjs/common';
-import { CreateSkillDto, UpdateSkillDto } from './dto';
-import { SkillService } from './skill.service';
-import { Skill } from './entities';
+import { CreateSkillDto, UpdateSkillDto } from '../dto';
+import { SkillService } from '../services/skill.service';
+import { Skill } from '../entities';
 
 @Controller('v1/skill')
 export class SkillController {
