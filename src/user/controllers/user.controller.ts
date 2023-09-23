@@ -9,11 +9,11 @@ import {
   HttpCode,
   Query,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
-import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserFiltersService } from './userFilters.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { User } from '../entities/user.entity';
+import { UserService } from '../services/user.service';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserFiltersService } from '../services/filters.service';
 
 @Controller('/v1/user')
 export class UserController {
