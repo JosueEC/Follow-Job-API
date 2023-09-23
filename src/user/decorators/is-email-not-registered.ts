@@ -4,7 +4,7 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
 } from 'class-validator';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../services/user.service';
 
 // Con este decorador extendemos la clase para usarla como un decorador
 // custom.
