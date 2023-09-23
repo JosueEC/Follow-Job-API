@@ -1,5 +1,5 @@
-import { Occupation } from 'src/occupation/entities/occupation.entity';
-import { Profile } from 'src/profile/entities/profile.entity';
+import { Occupation } from '../../occupation/entities/occupation.entity';
+import { Profile } from '../../profile/entities/profile.entity';
 import {
   Column,
   Entity,

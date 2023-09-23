@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  followMyJob_pg:
+    image: postgres:15.4
+    container_name: followMyJob_pg
+    environment:
+      POSTGRES_DB: followMyJob_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret1234
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5433:5432
