@@ -5,22 +5,22 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Skill } from '../entities';
+import { SkillEntity } from '../entities';
 import { Repository } from 'typeorm';
 import { CreateSkillDto, UpdateSkillDto } from '../dto';
 
 @Injectable()
 export class SkillService {
   constructor(
-    @InjectRepository(Skill)
-    private readonly skillRepository: Repository<Skill>,
+    @InjectRepository(SkillEntity)
+    private readonly skillRepository: Repository<SkillEntity>,
   ) {}
 
-  public async findAll(): Promise<Skill[]> {
+  public async findAll(): Promise<SkillEntity[]> {
     return await this.skillRepository.find();
   }
 
-  public async create(skill: CreateSkillDto): Promise<Skill> {
+  public async create(skill: CreateSkillDto): Promise<SkillEntity> {
     const skillExists = await this.skillRepository.findOneBy({
       name: skill.name,
     });
@@ -33,19 +33,34 @@ export class SkillService {
     return this.skillRepository.save(newSkill);
   }
 
-  public async update(skill: UpdateSkillDto): Promise<Skill> {
-    const skillExists = await this.skillRepository.findOneBy({ id: skill.id });
+  public async update(skill: UpdateSkillDto): Promise<SkillEntity> {
+    const skillExists = await this.skillRepository
+      .createQueryBuilder('skill')
+      .where({ id: skill.id })
+      .getOne();
 
     if (!skillExists) {
       throw new NotFoundException('Skill not found :(');
     }
 
-    await this.skillRepository.update(skill.id, skill);
-    return await this.skillRepository.findOneBy({ id: skill.id });
+    await this.skillRepository
+      .createQueryBuilder('skill')
+      .update(SkillEntity)
+      .set({ name: skill.name })
+      .where({ id: skill.id })
+      .execute();
+
+    return await this.skillRepository
+      .createQueryBuilder('skill')
+      .where({ id: skill.id })
+      .getOne();
   }
 
-  public async delete(id: number): Promise<Skill> {
-    const skillExists = await this.skillRepository.findOneBy({ id });
+  public async delete(id: number): Promise<SkillEntity> {
+    const skillExists = await this.skillRepository
+      .createQueryBuilder('skill')
+      .where({ id })
+      .getOne();
 
     if (!skillExists) {
       throw new NotFoundException('Skill not found :(');
