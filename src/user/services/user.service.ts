@@ -7,13 +7,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { User } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   public async exists(email: string): Promise<boolean> {
@@ -22,7 +23,7 @@ export class UserService {
     return userFound ? true : false;
   }
 
-  public async create(user: CreateUserDto): Promise<User> {
+  public async create(user: CreateUserDto): Promise<UserEntity> {
     const userExists = await this.exists(user.email);
 
     if (userExists) {
@@ -33,16 +34,19 @@ export class UserService {
     return await this.userRepository.save(userCreated);
   }
 
-  public async save(user: CreateUserDto): Promise<User> {
+  public async save(user: CreateUserDto): Promise<UserEntity> {
     return await this.userRepository.save(user);
   }
 
-  public async findAll(): Promise<User[]> {
+  public async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
 
-  public async findOne(id: string): Promise<User> {
-    const userFound = await this.userRepository.findOneBy({ id });
+  public async findOne(id: string): Promise<UserEntity> {
+    const userFound = await this.userRepository
+      .createQueryBuilder('user')
+      .where({ id })
+      .getOne();
 
     if (!userFound) {
       throw new NotFoundException('User not found');
@@ -51,12 +55,13 @@ export class UserService {
     return userFound;
   }
 
-  public async findByEmail(email: string): Promise<User | undefined> {
+  public async findByEmail(email: string): Promise<UserEntity | undefined> {
     return this.userRepository.findOneBy({ email });
   }
 
-  public async update(id: string, user: UpdateUserDto): Promise<User> {
+  public async update(id: string, user: UpdateUserDto): Promise<UserEntity> {
     await this.findOne(id);
+
     const result = await this.userRepository.update(id, user);
 
     if (result.affected === 0) {
@@ -68,7 +73,7 @@ export class UserService {
     return this.findOne(id);
   }
 
-  public async deleteOne(id: string): Promise<User> {
+  public async deleteOne(id: string): Promise<UserEntity> {
     const userFound = await this.findOne(id);
 
     const result = await this.userRepository.delete(id);

@@ -1,29 +1,37 @@
-import { Occupation } from '../../occupation/entities/occupation.entity';
-import { Profile } from '../../profile/entities/profile.entity';
+import { OccupationEntity } from '../../occupation/entities/occupation.entity';
+import { ProfileEntity } from '../../profile/entities/profile.entity';
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IUser } from '../interfaces/user.interface';
 
 @Entity({ name: 'user' })
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ name: 'email', type: 'varchar', length: '200', unique: true })
+export class UserEntity extends BaseEntity implements IUser {
+  @Column({
+    name: 'email',
+    type: 'varchar',
+    length: 255,
+    unique: true,
+  })
   email: string;
 
-  @Column({ name: 'password', type: 'varchar', length: '200' })
+  @Column({
+    name: 'password',
+    type: 'varchar',
+    length: 255,
+    select: false,
+  })
   password: string;
 
-  @OneToOne(() => Profile)
+  @OneToOne(() => ProfileEntity)
   @JoinColumn()
-  profile: Profile;
+  profile: ProfileEntity;
 
-  @OneToMany(() => Occupation, (occuapation) => occuapation.professional)
-  occupations: Occupation[];
+  @OneToMany(() => OccupationEntity, (occuapation) => occuapation.professional)
+  occupations: OccupationEntity[];
 }

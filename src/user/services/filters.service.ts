@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserFiltersService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  public async findAllAddProfile(): Promise<User[]> {
+  public async findAllAddProfile(): Promise<UserEntity[]> {
     return await this.userRepository.find({
       //* select: ['email'],
       // De esta forma se pueden establecer que campos se
@@ -35,20 +36,20 @@ export class UserFiltersService {
     });
   }
 
-  public async findAllAddOccupations(): Promise<User[]> {
+  public async findAllAddOccupations(): Promise<UserEntity[]> {
     return await this.userRepository.find({
       relations: ['occupations'],
       select: {
         occupations: {
           name: true,
-          years_experience: true,
-          months_experience: true,
+          yearsExperience: true,
+          monthsExperience: true,
         },
       },
     });
   }
 
-  public async findAllAddRelations(): Promise<User[]> {
+  public async findAllAddRelations(): Promise<UserEntity[]> {
     return await this.userRepository.find({
       relations: ['profile', 'occupations'],
       select: {
@@ -58,8 +59,8 @@ export class UserFiltersService {
         },
         occupations: {
           name: true,
-          years_experience: true,
-          months_experience: true,
+          yearsExperience: true,
+          monthsExperience: true,
         },
       },
     });
