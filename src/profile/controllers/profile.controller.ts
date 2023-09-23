@@ -1,7 +1,7 @@
 import { Controller, Param, Body, Post, Get } from '@nestjs/common';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileService } from '../services/profile.service';
-import { Profile } from '../entities/profile.entity';
+import { ProfileEntity } from '../entities/profile.entity';
 
 @Controller('/v1/profile')
 export class ProfileController {
@@ -16,7 +16,7 @@ export class ProfileController {
   }
 
   @Get()
-  public async getAllProfiles(): Promise<Profile[]> {
+  public async getAllProfiles(): Promise<ProfileEntity[]> {
     return await this.profileService.findAll();
   }
 }

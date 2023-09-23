@@ -2,18 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProfileDto } from '../dto/create-profile.dto';
-import { Profile } from '../entities/profile.entity';
+import { ProfileEntity } from '../entities/profile.entity';
 import { UserService } from '../../user/services/user.service';
 
 @Injectable()
 export class ProfileService {
   constructor(
-    @InjectRepository(Profile)
-    private readonly profileRepository: Repository<Profile>,
+    @InjectRepository(ProfileEntity)
+    private readonly profileRepository: Repository<ProfileEntity>,
     private readonly userService: UserService,
   ) {}
 
-  public async create(id: string, profile: CreateProfileDto): Promise<Profile> {
+  public async create(
+    id: string,
+    profile: CreateProfileDto,
+  ): Promise<ProfileEntity> {
     const userFound = await this.userService.findOne(id);
 
     const profileCreated = this.profileRepository.create(profile);
@@ -25,7 +28,7 @@ export class ProfileService {
     return profileSaved;
   }
 
-  public async findAll(): Promise<Profile[]> {
+  public async findAll(): Promise<ProfileEntity[]> {
     return this.profileRepository.find();
   }
 }
