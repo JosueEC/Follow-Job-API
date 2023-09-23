@@ -5,9 +5,9 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Skill } from './entities';
+import { Skill } from '../entities';
 import { Repository } from 'typeorm';
-import { CreateSkillDto, UpdateSkillDto } from './dto';
+import { CreateSkillDto, UpdateSkillDto } from '../dto';
 
 @Injectable()
 export class SkillService {

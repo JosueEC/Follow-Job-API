@@ -4,19 +4,16 @@ import { UserModule } from './user/user.module';
 import { ProfileModule } from './profile/profile.module';
 import { OccupationModule } from './occupation/occupation.module';
 import { SkillModule } from './skill/skill.module';
+import { DataSourceConfig } from './config/data.source';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'admin',
-      database: 'followjob_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+      isGlobal: true,
     }),
+    TypeOrmModule.forRoot(DataSourceConfig),
     UserModule,
     ProfileModule,
     OccupationModule,

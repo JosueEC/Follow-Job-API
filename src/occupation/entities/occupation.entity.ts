@@ -1,5 +1,13 @@
-import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Skill } from '../../skill/entities/skill.entity';
+import { User } from '../../user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'occupation' })
 export class Occupation {
@@ -31,5 +39,18 @@ export class Occupation {
   @ManyToOne(() => User)
   professional: User;
 
-  // skills: Skill[]
+  //* @ManyToMany()
+  //    De esta forma se establece una relacion n:n, es importante
+  //    que el tipo de dato de la propiedad sea un array de objetos
+  //    de la entidad de la relacion
+  //* @JoinTable()
+  //    Este decorador nos permite definir las propiedades de la tabla
+  //    intermedia que se crea de la relacion ManyToMany
+  @ManyToMany(() => Skill, (skill) => skill.occupations)
+  @JoinTable({
+    name: 'occupation_skill', // Nombre de la tabla
+    joinColumn: { name: 'occupation_id' }, // nombre de la columna que almacena el id de la primer tabla
+    inverseJoinColumn: { name: 'skill_id' }, // nombre de la columna que almacena el id de la segunda tabla
+  })
+  skills: Skill[];
 }

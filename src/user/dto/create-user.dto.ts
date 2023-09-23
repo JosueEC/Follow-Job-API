@@ -5,7 +5,7 @@ import {
   MaxLength,
   IsStrongPassword,
 } from 'class-validator';
-import { IsEmailNotRegistered } from './custom-validators/is-email-not-registered';
+import { IsEmailNotRegistered } from '../decorators/is-email-not-registered';
 
 export class CreateUserDto {
   @IsEmail()
