@@ -1,7 +1,7 @@
 import { Controller, Body, Post, Get } from '@nestjs/common';
-import { CreateOccupationDto } from './dto/create-occupation.dto';
-import { Occupation } from './entities/occupation.entity';
-import { OccupationService } from './occupation.service';
+import { CreateOccupationDto } from '../dto/create-occupation.dto';
+import { Occupation } from '../entities/occupation.entity';
+import { OccupationService } from '../services/occupation.service';
 
 @Controller('/v1/occupation')
 export class OccupationController {
