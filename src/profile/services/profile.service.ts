@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileEntity } from '../entities/profile.entity';
 import { UserService } from '../../user/services/user.service';
+import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class ProfileService {
@@ -15,20 +16,35 @@ export class ProfileService {
 
   public async create(
     id: string,
-    profile: CreateProfileDto,
+    body: CreateProfileDto,
   ): Promise<ProfileEntity> {
-    const userFound = await this.userService.findOne(id);
+    try {
+      const userFound = await this.userService.findOne(id);
 
-    const profileCreated = this.profileRepository.create(profile);
-    const profileSaved = await this.profileRepository.save(profileCreated);
+      if (!userFound) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found : (',
+        });
+      }
 
-    userFound.profile = profileSaved;
-    await this.userService.save(userFound);
+      const profileCreated = this.profileRepository.create(body);
+      const profileSaved = await this.profileRepository.save(profileCreated);
 
-    return profileSaved;
+      userFound.profile = profileSaved;
+      await this.userService.save(userFound);
+
+      return profileSaved;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   public async findAll(): Promise<ProfileEntity[]> {
-    return this.profileRepository.find();
+    try {
+      return this.profileRepository.find();
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }
