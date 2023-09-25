@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { IProfile } from '../interfaces/profile.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({ name: 'profile' })
 export class ProfileEntity extends BaseEntity implements IProfile {

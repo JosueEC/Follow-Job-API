@@ -1,14 +1,8 @@
 import { SkillEntity } from '../../skill/entities/skill.entity';
 import { UserEntity } from '../../user/entities/user.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { IOccupation } from '../interfaces/occupation.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({ name: 'occupation' })
 export class OccupationEntity extends BaseEntity implements IOccupation {

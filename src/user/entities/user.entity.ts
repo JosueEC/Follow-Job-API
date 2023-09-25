@@ -1,14 +1,8 @@
 import { OccupationEntity } from '../../occupation/entities/occupation.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { IUser } from '../interfaces/user.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
