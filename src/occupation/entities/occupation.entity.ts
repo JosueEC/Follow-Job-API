@@ -1,20 +1,17 @@
-import { Skill } from '../../skill/entities/skill.entity';
-import { User } from '../../user/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { SkillEntity } from '../../skill/entities/skill.entity';
+import { UserEntity } from '../../user/entities/user.entity';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { IOccupation } from '../interfaces/occupation.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({ name: 'occupation' })
-export class Occupation {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ name: 'name', type: 'varchar', length: 300, unique: true })
+export class OccupationEntity extends BaseEntity implements IOccupation {
+  @Column({
+    name: 'name',
+    type: 'varchar',
+    length: 300,
+    unique: true,
+  })
   name: string;
 
   @Column({
@@ -23,7 +20,7 @@ export class Occupation {
     nullable: true,
     default: 0,
   })
-  years_experience: number;
+  yearsExperience: number;
 
   @Column({
     name: 'months_experience',
@@ -31,13 +28,16 @@ export class Occupation {
     nullable: true,
     default: 0,
   })
-  months_experience: number;
+  monthsExperience: number;
 
-  @Column({ name: 'professionalId', type: 'uuid' })
+  @Column({
+    name: 'professionalId',
+    type: 'uuid',
+  })
   professionalId: string;
 
-  @ManyToOne(() => User)
-  professional: User;
+  @ManyToOne(() => UserEntity)
+  professional: UserEntity;
 
   //* @ManyToMany()
   //    De esta forma se establece una relacion n:n, es importante
@@ -46,11 +46,11 @@ export class Occupation {
   //* @JoinTable()
   //    Este decorador nos permite definir las propiedades de la tabla
   //    intermedia que se crea de la relacion ManyToMany
-  @ManyToMany(() => Skill, (skill) => skill.occupations)
+  @ManyToMany(() => SkillEntity, (skill) => skill.occupations)
   @JoinTable({
     name: 'occupation_skill', // Nombre de la tabla
     joinColumn: { name: 'occupation_id' }, // nombre de la columna que almacena el id de la primer tabla
     inverseJoinColumn: { name: 'skill_id' }, // nombre de la columna que almacena el id de la segunda tabla
   })
-  skills: Skill[];
+  skills: SkillEntity[];
 }

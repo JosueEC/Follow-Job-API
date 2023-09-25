@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { User } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { UserService } from '../services/user.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserFiltersService } from '../services/filters.service';
@@ -23,7 +23,7 @@ export class UserController {
   ) {}
 
   @Post()
-  public async createUser(@Body() user: CreateUserDto): Promise<User> {
+  public async createUser(@Body() user: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(user);
   }
 
@@ -31,7 +31,7 @@ export class UserController {
   public async getAllUsers(
     @Query('addProfile') addProfile: boolean,
     @Query('addOccupations') addOccupations: boolean,
-  ): Promise<User[]> {
+  ): Promise<UserEntity[]> {
     if (addProfile && addOccupations) {
       return this.userFiltersService.findAllAddRelations();
     } else if (addProfile) {
@@ -43,7 +43,7 @@ export class UserController {
   }
 
   @Get(':id')
-  public async getOneUser(@Param('id') id: string): Promise<User> {
+  public async getOneUser(@Param('id') id: string): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
@@ -51,13 +51,13 @@ export class UserController {
   public async updateUser(
     @Param('id') id: string,
     @Body() user: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     return this.userService.update(id, user);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  public async deleteOneUser(@Param('id') id: string): Promise<User> {
+  public async deleteOneUser(@Param('id') id: string): Promise<UserEntity> {
     return await this.userService.deleteOne(id);
   }
 }

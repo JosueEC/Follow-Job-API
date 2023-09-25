@@ -1,1 +1,1 @@
-export { Skill } from './skill.entity';
+export { SkillEntity } from './skill.entity';

@@ -1,13 +1,20 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { IProfile } from '../interfaces/profile.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({ name: 'profile' })
-export class Profile {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ name: 'name', type: 'varchar', length: 300 })
+export class ProfileEntity extends BaseEntity implements IProfile {
+  @Column({
+    name: 'name',
+    type: 'varchar',
+    length: 300,
+  })
   name: string;
 
-  @Column({ name: 'profession', type: 'varchar', length: 300 })
+  @Column({
+    name: 'profession',
+    type: 'varchar',
+    length: 300,
+  })
   profession: string;
 }

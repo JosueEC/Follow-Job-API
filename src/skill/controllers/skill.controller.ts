@@ -11,19 +11,21 @@ import {
 } from '@nestjs/common';
 import { CreateSkillDto, UpdateSkillDto } from '../dto';
 import { SkillService } from '../services/skill.service';
-import { Skill } from '../entities';
+import { SkillEntity } from '../entities';
 
 @Controller('v1/skill')
 export class SkillController {
   constructor(private readonly skillService: SkillService) {}
 
   @Post()
-  public async createSkill(@Body() skill: CreateSkillDto): Promise<Skill> {
+  public async createSkill(
+    @Body() skill: CreateSkillDto,
+  ): Promise<SkillEntity> {
     return await this.skillService.create(skill);
   }
 
   @Get()
-  public async getAllSkills(): Promise<Skill[]> {
+  public async getAllSkills(): Promise<SkillEntity[]> {
     return await this.skillService.findAll();
   }
 
@@ -31,7 +33,7 @@ export class SkillController {
   public async updateOneSkill(
     @Body()
     skill: UpdateSkillDto,
-  ): Promise<Skill> {
+  ): Promise<SkillEntity> {
     return await this.skillService.update(skill);
   }
 
@@ -39,7 +41,7 @@ export class SkillController {
   @HttpCode(204)
   public async deleteOneSkill(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<Skill> {
+  ): Promise<SkillEntity> {
     return await this.skillService.delete(id);
   }
 }
