@@ -1,8 +1,8 @@
-import { LevelSkill } from 'src/skill/enums';
+import { LevelSkill } from '../../skill/enums';
 import { OccupationEntity } from './occupation.entity';
-import { SkillEntity } from 'src/skill/entities';
+import { SkillEntity } from '../../skill/entities';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 
 @Entity({ name: 'occupations_skills' })
 export class OccupationsSkillsEntity extends BaseEntity {
