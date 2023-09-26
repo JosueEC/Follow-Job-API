@@ -4,13 +4,16 @@ import { OccupationEntity } from '../entities/occupation.entity';
 import { Repository } from 'typeorm';
 import { CreateOccupationDto } from '../dto/create-occupation.dto';
 import { UserService } from '../../user/services/user.service';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
+import { OccupationsSkillsEntity } from '../entities/occupations-skills.entity';
 
 @Injectable()
 export class OccupationService {
   constructor(
     @InjectRepository(OccupationEntity)
     private readonly occupationRepository: Repository<OccupationEntity>,
+    @InjectRepository(OccupationsSkillsEntity)
+    private readonly occupationSkillRepository: Repository<OccupationsSkillsEntity>,
     private readonly userService: UserService,
   ) {}
 

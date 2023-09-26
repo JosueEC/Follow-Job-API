@@ -1,7 +1,7 @@
 import { UserEntity } from '../../user/entities/user.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { IOccupation } from '../interfaces/occupation.interface';
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 import { OccupationsSkillsEntity } from './occupations-skills.entity';
 
 @Entity({ name: 'occupation' })

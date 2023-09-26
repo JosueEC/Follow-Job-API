@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
 export class UserFiltersService {

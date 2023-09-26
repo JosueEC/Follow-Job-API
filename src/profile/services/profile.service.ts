@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileEntity } from '../entities/profile.entity';
 import { UserService } from '../../user/services/user.service';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
 export class ProfileService {
