@@ -1,8 +1,8 @@
-import { SkillEntity } from '../../skill/entities/skill.entity';
 import { UserEntity } from '../../user/entities/user.entity';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { IOccupation } from '../interfaces/occupation.interface';
 import { BaseEntity } from 'src/config/base.entity';
+import { OccupationsSkillsEntity } from './occupations-skills.entity';
 
 @Entity({ name: 'occupation' })
 export class OccupationEntity extends BaseEntity implements IOccupation {
@@ -46,11 +46,15 @@ export class OccupationEntity extends BaseEntity implements IOccupation {
   //* @JoinTable()
   //    Este decorador nos permite definir las propiedades de la tabla
   //    intermedia que se crea de la relacion ManyToMany
-  @ManyToMany(() => SkillEntity, (skill) => skill.occupations)
-  @JoinTable({
-    name: 'occupation_skill', // Nombre de la tabla
-    joinColumn: { name: 'occupation_id' }, // nombre de la columna que almacena el id de la primer tabla
-    inverseJoinColumn: { name: 'skill_id' }, // nombre de la columna que almacena el id de la segunda tabla
-  })
-  skills: SkillEntity[];
+  // @ManyToMany(() => SkillEntity, (skill) => skill.occupations)
+  // @JoinTable({
+  //   name: 'occupation_skill', // Nombre de la tabla
+  //   joinColumn: { name: 'occupation_id' }, // nombre de la columna que almacena el id de la primer tabla
+  //   inverseJoinColumn: { name: 'skill_id' }, // nombre de la columna que almacena el id de la segunda tabla
+  // })
+  @OneToMany(
+    () => OccupationsSkillsEntity,
+    (occupationsSkill) => occupationsSkill.occupation,
+  )
+  skillsIncludes: OccupationsSkillsEntity[];
 }
