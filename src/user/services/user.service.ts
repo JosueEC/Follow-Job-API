@@ -71,7 +71,10 @@ export class UserService {
 
   public async findByEmail(email: string): Promise<UserEntity | undefined> {
     try {
-      return this.userRepository.findOneBy({ email });
+      return this.userRepository
+        .createQueryBuilder('user')
+        .where({ email })
+        .getOne();
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
