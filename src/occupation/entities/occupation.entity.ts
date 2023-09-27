@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { IOccupation } from '../interfaces/occupation.interface';
 import { BaseEntity } from '../../config/base.entity';
 import { OccupationsSkillsEntity } from './occupations-skills.entity';
+import { UsersOccupationsEntity } from '../../user/entities/users-occupations.entity';
 
 @Entity({ name: 'occupation' })
 export class OccupationEntity extends BaseEntity implements IOccupation {
@@ -57,4 +58,10 @@ export class OccupationEntity extends BaseEntity implements IOccupation {
     (occupationsSkill) => occupationsSkill.occupation,
   )
   skillsIncludes: OccupationsSkillsEntity[];
+
+  @OneToMany(
+    () => UsersOccupationsEntity,
+    (userOccupation) => userOccupation.occupation,
+  )
+  usersIncludes: UsersOccupationsEntity[];
 }

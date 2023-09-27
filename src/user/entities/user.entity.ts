@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { OccupationEntity } from '../../occupation/entities/occupation.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { IUser } from '../interfaces/user.interface';
 import { BaseEntity } from '../../config/base.entity';
+import { UsersOccupationsEntity } from './users-occupations.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -26,6 +26,9 @@ export class UserEntity extends BaseEntity implements IUser {
   @JoinColumn()
   profile: ProfileEntity;
 
-  @OneToMany(() => OccupationEntity, (occuapation) => occuapation.professional)
-  occupations: OccupationEntity[];
+  @OneToMany(
+    () => UsersOccupationsEntity,
+    (userOccupation) => userOccupation.user,
+  )
+  occupationsIncludes: UsersOccupationsEntity[];
 }
