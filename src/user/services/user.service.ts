@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
 export class UserService {
@@ -71,7 +71,10 @@ export class UserService {
 
   public async findByEmail(email: string): Promise<UserEntity | undefined> {
     try {
-      return this.userRepository.findOneBy({ email });
+      return this.userRepository
+        .createQueryBuilder('user')
+        .where({ email })
+        .getOne();
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

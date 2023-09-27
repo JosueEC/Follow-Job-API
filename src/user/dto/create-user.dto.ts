@@ -5,9 +5,10 @@ import {
   MaxLength,
   IsStrongPassword,
 } from 'class-validator';
+import { IUser } from '../interfaces/user.interface';
 import { IsEmailNotRegistered } from '../decorators/is-email-not-registered';
 
-export class CreateUserDto {
+export class CreateUserDto implements IUser {
   @IsEmail()
   @IsString()
   @IsNotEmpty()

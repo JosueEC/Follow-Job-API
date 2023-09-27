@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SkillEntity } from '../entities';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateSkillDto, UpdateSkillDto } from '../dto';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
 export class SkillService {

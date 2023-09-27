@@ -6,6 +6,11 @@ import {
 } from 'class-validator';
 import { UserService } from '../services/user.service';
 
+//* NOTA: El decorador funciona perfectamente pero solo despues del
+//* primer registro de un usuario, en el caso del primer registr
+//* cuando la BD esta vacia, devolvera que el email ya esta en uso
+//* aunque este vacia la BD, despues del primer registro funcionara
+//* perfectamente
 // Con este decorador extendemos la clase para usarla como un decorador
 // custom.
 @ValidatorConstraint({ name: 'IsEmailNotRegistered', async: true })

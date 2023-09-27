@@ -1,7 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { ISkill } from '../interfaces/skill.interface';
-import { OccupationEntity } from 'src/occupation/entities/occupation.entity';
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
+import { OccupationsSkillsEntity } from '../../occupation/entities/occupations-skills.entity';
 
 @Entity({ name: 'skill' })
 export class SkillEntity extends BaseEntity implements ISkill {
@@ -13,5 +13,9 @@ export class SkillEntity extends BaseEntity implements ISkill {
   })
   name: string;
 
-  occupations: OccupationEntity[];
+  @OneToMany(
+    () => OccupationsSkillsEntity,
+    (occupationsSkills) => occupationsSkills.skill,
+  )
+  occupationsIncludes: OccupationsSkillsEntity[];
 }
