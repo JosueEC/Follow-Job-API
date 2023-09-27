@@ -41,41 +41,41 @@ export class UserFiltersService {
     }
   }
 
-  public async findAllAddOccupations(): Promise<UserEntity[]> {
-    try {
-      return await this.userRepository.find({
-        relations: ['occupations'],
-        select: {
-          occupations: {
-            name: true,
-            yearsExperience: true,
-            monthsExperience: true,
-          },
-        },
-      });
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
-  }
+  // public async findAllAddOccupations(): Promise<UserEntity[]> {
+  //   try {
+  //     return await this.userRepository.find({
+  //       relations: ['occupations'],
+  //       select: {
+  //         occupation: {
+  //           name: true,
+  //           yearsExperience: true,
+  //           monthsExperience: true,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message);
+  //   }
+  // }
 
-  public async findAllAddRelations(): Promise<UserEntity[]> {
-    try {
-      return await this.userRepository.find({
-        relations: ['profile', 'occupations'],
-        select: {
-          profile: {
-            name: true,
-            profession: true,
-          },
-          occupations: {
-            name: true,
-            yearsExperience: true,
-            monthsExperience: true,
-          },
-        },
-      });
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
-  }
+  // public async findAllAddRelations(): Promise<UserEntity[]> {
+  //   try {
+  //     return await this.userRepository.find({
+  //       relations: ['profile', 'occupations'],
+  //       select: {
+  //         profile: {
+  //           name: true,
+  //           profession: true,
+  //         },
+  //         occupations: {
+  //           name: true,
+  //           yearsExperience: true,
+  //           monthsExperience: true,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message);
+  //   }
+  // }
 }
