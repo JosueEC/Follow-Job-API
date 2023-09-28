@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Post, Get } from '@nestjs/common';
+import { Controller, Param, Body, Post, Get, Delete } from '@nestjs/common';
 import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileService } from '../services/profile.service';
 import { ProfileEntity } from '../entities/profile.entity';
@@ -18,5 +18,10 @@ export class ProfileController {
   @Get()
   public async getAllProfiles(): Promise<ProfileEntity[]> {
     return await this.profileService.findAll();
+  }
+
+  @Delete(':userId')
+  public async deleteProfile(@Param('userId') userId: string) {
+    return await this.profileService.delete(userId);
   }
 }
