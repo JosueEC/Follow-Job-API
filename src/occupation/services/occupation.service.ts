@@ -6,6 +6,8 @@ import { CreateOccupationDto } from '../dto/create-occupation.dto';
 import { UserService } from '../../user/services/user.service';
 import { ErrorManager } from '../../utils/error.manager';
 import { OccupationsSkillsEntity } from '../entities/occupations-skills.entity';
+import { UsersOccupationsEntity } from 'src/user/entities/users-occupations.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class OccupationService {
@@ -14,22 +16,34 @@ export class OccupationService {
     private readonly occupationRepository: Repository<OccupationEntity>,
     @InjectRepository(OccupationsSkillsEntity)
     private readonly occupationSkillRepository: Repository<OccupationsSkillsEntity>,
+    @InjectRepository(UsersOccupationsEntity)
+    private readonly userOccupationsRepository: Repository<UsersOccupationsEntity>,
     private readonly userService: UserService,
   ) {}
 
-  public async create(body: CreateOccupationDto): Promise<OccupationEntity> {
+  public async create(
+    userId: string,
+    body: CreateOccupationDto,
+  ): Promise<UserEntity> {
     try {
-      const userFound = await this.userService.findOne(body.professionalId);
+      const user = await this.userService.findOne(userId);
+      const occupation = await this.occupationRepository.save(body);
 
-      if (!userFound) {
+      if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found :(',
         });
       }
 
-      const newOccupation = this.occupationRepository.create(body);
-      return await this.occupationRepository.save(newOccupation);
+      await this.userOccupationsRepository.save({
+        user,
+        occupation,
+        monthsExperience: body.monthsExperience,
+        yearsExperience: body.yearsExperience,
+      });
+
+      return this.userService.findOne(userId);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
