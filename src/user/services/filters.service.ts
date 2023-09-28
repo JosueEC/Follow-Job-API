@@ -41,22 +41,24 @@ export class UserFiltersService {
     }
   }
 
-  // public async findAllAddOccupations(): Promise<UserEntity[]> {
-  //   try {
-  //     return await this.userRepository.find({
-  //       relations: ['occupations'],
-  //       select: {
-  //         occupation: {
-  //           name: true,
-  //           yearsExperience: true,
-  //           monthsExperience: true,
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     throw ErrorManager.createSignatureError(error.message);
-  //   }
-  // }
+  public async findAllAddOccupations(): Promise<UserEntity[]> {
+    try {
+      return await this.userRepository.find({
+        relations: ['occupationsIncludes'],
+        select: {
+          occupationsIncludes: {
+            occupation: {
+              name: true,
+            },
+            monthsExperience: true,
+            yearsExperience: true,
+          },
+        },
+      });
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 
   // public async findAllAddRelations(): Promise<UserEntity[]> {
   //   try {
