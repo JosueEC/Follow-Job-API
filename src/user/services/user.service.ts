@@ -52,8 +52,20 @@ export class UserService {
   public async findOne(id: string): Promise<UserEntity> {
     try {
       const userFound = await this.userRepository
+        // El parametro que recibe la instruccion createQueryBuilder
+        // es el alias que se le da al resultado
         .createQueryBuilder('user')
-        .where({ id })
+        // La instruccion select nos permite elejir columnas
+        // especificas en la consulta, si solo es una esta puede
+        // ir en comillas simples, cuando son varias deben ir
+        // en un arreglo
+        // .select(['user.id AS id', 'user.email AS email', 'user.profile'])
+        .leftJoinAndSelect('user.profile', 'profile')
+        // Esta forma en la que se usa el where es para evitar
+        // los ataques por inyeccion SQL
+        .where('user.id = :userId', { userId: id })
+        //* Nota: En consultas que usan la instruccion select
+        //* estas se deben obtener con Raw(getRawOne, getRawMany)
         .getOne();
 
       if (!userFound) {
