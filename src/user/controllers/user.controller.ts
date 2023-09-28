@@ -7,7 +7,7 @@ import {
   Patch,
   Delete,
   HttpCode,
-  // Query,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
@@ -27,20 +27,18 @@ export class UserController {
     return this.userService.create(user);
   }
 
-  // @Get()
-  // public async getAllUsers(
-  //   @Query('addProfile') addProfile: boolean,
-  //   @Query('addOccupations') addOccupations: boolean,
-  // ): Promise<UserEntity[]> {
-  //   if (addProfile && addOccupations) {
-  //     return this.userFiltersService.findAllAddRelations();
-  //   } else if (addProfile) {
-  //     return await this.userFiltersService.findAllAddProfile();
-  //   } else if (addOccupations) {
-  //     return await this.userFiltersService.findAllAddOccupations();
-  //   }
-  //   return await this.userService.findAll();
-  // }
+  @Get()
+  public async getAllUsers(
+    @Query('addProfile') addProfile: boolean,
+    @Query('addOccupations') addOccupations: boolean,
+  ): Promise<UserEntity[]> {
+    if (addProfile) {
+      return await this.userFiltersService.findAllAddProfile();
+    } else if (addOccupations) {
+      return await this.userFiltersService.findAllAddOccupations();
+    }
+    return await this.userService.findAll();
+  }
 
   @Get(':id')
   public async getOneUser(@Param('id') id: string): Promise<UserEntity> {
