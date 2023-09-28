@@ -60,7 +60,17 @@ export class UserService {
         // ir en comillas simples, cuando son varias deben ir
         // en un arreglo
         // .select(['user.id AS id', 'user.email AS email', 'user.profile'])
+        // Para conectarnos a una relacion OneToOne basta con un leftJoinAndSelect
+        // accediendo a la propiedad de conexion y asignando un alias
         .leftJoinAndSelect('user.profile', 'profile')
+        // Para conectarse a une relacion ManyToMany a traves de una tabla
+        // intermedia es necesario usar 2 leftJoinAndSelect, el primero conecta
+        // con la tabla intermedia y devuelve sus datos y el segundo realiza la
+        // segunda conexion con la otra tabla que esta conectada a traves de la
+        // tabla intermedia y asi accedemos a los datos gracias a la conexion
+        // Igualmente debemos asignar alias a estas consultas
+        .leftJoinAndSelect('user.occupationsIncludes', 'occupationsIncludes')
+        .leftJoinAndSelect('occupationsIncludes.occupation', 'occupation')
         // Esta forma en la que se usa el where es para evitar
         // los ataques por inyeccion SQL
         .where('user.id = :userId', { userId: id })
