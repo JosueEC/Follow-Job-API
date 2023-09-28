@@ -1,5 +1,5 @@
 export interface IOccupation {
   name: string;
-  yearsExperience: number;
-  monthsExperience: number;
+  yearsExperience?: number;
+  monthsExperience?: number;
 }

@@ -3,14 +3,14 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
   Max,
   MaxLength,
   Min,
   MinLength,
 } from 'class-validator';
+import { IOccupation } from '../interfaces/occupation.interface';
 
-export class CreateOccupationDto {
+export class CreateOccupationDto implements IOccupation {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
@@ -22,17 +22,12 @@ export class CreateOccupationDto {
   @Min(0)
   @Max(100)
   @IsOptional()
-  years_experience: number;
+  yearsExperience: number;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
   @Max(12)
   @IsOptional()
-  months_experience: number;
-
-  @IsUUID()
-  @IsString()
-  @IsNotEmpty()
-  professionalId: string;
+  monthsExperience: number;
 }
