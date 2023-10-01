@@ -5,6 +5,7 @@ import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileEntity } from '../entities/profile.entity';
 import { UserService } from '../../user/services/user.service';
 import { ErrorManager } from '../../utils/error.manager';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ProfileService {
@@ -15,11 +16,11 @@ export class ProfileService {
   ) {}
 
   public async create(
-    id: string,
+    userId: string,
     body: CreateProfileDto,
-  ): Promise<ProfileEntity> {
+  ): Promise<UserEntity> {
     try {
-      const userFound = await this.userService.findOne(id);
+      const userFound = await this.userService.findOne(userId);
 
       if (!userFound) {
         throw new ErrorManager({
@@ -29,12 +30,14 @@ export class ProfileService {
       }
 
       const profileCreated = this.profileRepository.create(body);
-      const profileSaved = await this.profileRepository.save(profileCreated);
+      // Esta accion ya no es necesaria, debido a que habilitamos la opcion
+      // cascade en la relacion
+      // const profileSaved = await this.profileRepository.save(profileCreated);
 
-      userFound.profile = profileSaved;
+      userFound.profile = profileCreated;
       await this.userService.save(userFound);
 
-      return profileSaved;
+      return this.userService.findOne(userId);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
