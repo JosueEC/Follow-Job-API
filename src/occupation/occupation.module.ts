@@ -6,6 +6,7 @@ import { OccupationService } from './services/occupation.service';
 import { UserModule } from '../user/user.module';
 import { OccupationsSkillsEntity } from './entities/occupations-skills.entity';
 import { UsersOccupationsEntity } from 'src/user/entities/users-occupations.entity';
+import { SkillModule } from 'src/skill/skill.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersOccupationsEntity } from 'src/user/entities/users-occupations.enti
       UsersOccupationsEntity,
     ]),
     UserModule,
+    SkillModule,
   ],
   controllers: [OccupationController],
   providers: [OccupationService],

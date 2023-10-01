@@ -1,7 +1,7 @@
 import { Controller, Body, Param, Post, Get } from '@nestjs/common';
-import { CreateOccupationDto } from '../dto/create-occupation.dto';
 import { OccupationEntity } from '../entities/occupation.entity';
 import { OccupationService } from '../services/occupation.service';
+import { CreateOccupationSkillDto } from '../dto/create-occupation-skill.dto';
 
 @Controller('/v1/occupation')
 export class OccupationController {
@@ -12,9 +12,9 @@ export class OccupationController {
     @Param('userId')
     userId: string,
     @Body()
-    occupationDto: CreateOccupationDto,
+    body: CreateOccupationSkillDto,
   ) {
-    return await this.occupationService.create(userId, occupationDto);
+    return await this.occupationService.create(userId, body);
   }
 
   @Get()
