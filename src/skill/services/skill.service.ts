@@ -40,6 +40,20 @@ export class SkillService {
     }
   }
 
+  public async findOrSave(body: CreateSkillDto): Promise<SkillEntity> {
+    try {
+      const skill = await this.skillRepository.findOneBy({ name: body.name });
+
+      if (skill) {
+        return skill;
+      }
+
+      return await this.skillRepository.save(body);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async update(body: UpdateSkillDto): Promise<SkillEntity> {
     try {
       const skillExists = await this.skillRepository
