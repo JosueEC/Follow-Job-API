@@ -14,9 +14,17 @@ export class OccupationsSkillsEntity extends BaseEntity {
   })
   level: LevelSkill;
 
-  @ManyToOne(() => OccupationEntity, (occupation) => occupation.skillsIncludes)
+  @ManyToOne(
+    () => OccupationEntity,
+    (occupation) => occupation.skillsIncludes,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   occupation: OccupationEntity;
 
-  @ManyToOne(() => SkillEntity, (skill) => skill.occupationsIncludes)
+  @ManyToOne(() => SkillEntity, (skill) => skill.occupationsIncludes, {
+    onDelete: 'CASCADE',
+  })
   skill: SkillEntity;
 }

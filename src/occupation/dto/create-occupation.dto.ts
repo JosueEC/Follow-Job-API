@@ -22,12 +22,15 @@ export class CreateOccupationDto implements IOccupation {
   @Min(0)
   @Max(100)
   @IsOptional()
-  yearsExperience: number;
+  // Esta es la forma en la que podemos definir valores por
+  // default de forma implicita, esto tambien se podria
+  // realizar a traves de class-validator
+  yearsExperience: number = 0;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
   @Max(12)
   @IsOptional()
-  monthsExperience: number;
+  monthsExperience: number = 0;
 }
