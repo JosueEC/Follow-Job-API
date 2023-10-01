@@ -22,7 +22,13 @@ export class UserEntity extends BaseEntity implements IUser {
   })
   password: string;
 
-  @OneToOne(() => ProfileEntity)
+  // Si habilitamos la opcion cascade en tru, significa que
+  // cuando creemos un usuario y le asignemos la relacion
+  // con su profile, no sera necesario que primero guardemos
+  // el profile y despues lo asignemos, solo debemos asignar
+  // el profile y este automaticamente tambien se guardara
+  // en la BD con su relacion
+  @OneToOne(() => ProfileEntity, { cascade: true })
   @JoinColumn()
   profile: ProfileEntity;
 

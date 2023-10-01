@@ -6,7 +6,6 @@ import {
   Get,
   Patch,
   Delete,
-  HttpCode,
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -14,6 +13,7 @@ import { UserEntity } from '../entities/user.entity';
 import { UserService } from '../services/user.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserFiltersService } from '../services/filters.service';
+import { DeleteResult } from 'typeorm';
 
 @Controller('/v1/user')
 export class UserController {
@@ -53,9 +53,10 @@ export class UserController {
     return this.userService.update(id, user);
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  public async deleteOneUser(@Param('id') id: string): Promise<UserEntity> {
-    return await this.userService.deleteOne(id);
+  @Delete(':userId')
+  public async deleteOneUser(
+    @Param('userId') userId: string,
+  ): Promise<DeleteResult> {
+    return await this.userService.deleteOne(userId);
   }
 }

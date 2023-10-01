@@ -21,9 +21,13 @@ export class UsersOccupationsEntity extends BaseEntity {
   })
   monthsExperience: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.occupationsIncludes)
+  @ManyToOne(() => UserEntity, (user) => user.occupationsIncludes, {
+    onDelete: 'CASCADE',
+  })
   user: UserEntity;
 
-  @ManyToOne(() => OccupationEntity, (occupation) => occupation.usersIncludes)
+  @ManyToOne(() => OccupationEntity, (occupation) => occupation.usersIncludes, {
+    onDelete: 'CASCADE',
+  })
   occupation: OccupationEntity;
 }
