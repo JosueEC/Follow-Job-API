@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { OccupationEntity } from '../../occupation/entities/occupation.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { IUser } from '../interfaces/user.interface';
 import { BaseEntity } from '../../config/base.entity';
+import { UsersOccupationsEntity } from './users-occupations.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -22,10 +22,19 @@ export class UserEntity extends BaseEntity implements IUser {
   })
   password: string;
 
-  @OneToOne(() => ProfileEntity)
+  // Si habilitamos la opcion cascade en tru, significa que
+  // cuando creemos un usuario y le asignemos la relacion
+  // con su profile, no sera necesario que primero guardemos
+  // el profile y despues lo asignemos, solo debemos asignar
+  // el profile y este automaticamente tambien se guardara
+  // en la BD con su relacion
+  @OneToOne(() => ProfileEntity, { cascade: true })
   @JoinColumn()
   profile: ProfileEntity;
 
-  @OneToMany(() => OccupationEntity, (occuapation) => occuapation.professional)
-  occupations: OccupationEntity[];
+  @OneToMany(
+    () => UsersOccupationsEntity,
+    (userOccupation) => userOccupation.user,
+  )
+  occupationsIncludes: UsersOccupationsEntity[];
 }

@@ -44,12 +44,14 @@ export class UserFiltersService {
   public async findAllAddOccupations(): Promise<UserEntity[]> {
     try {
       return await this.userRepository.find({
-        relations: ['occupations'],
+        relations: ['occupationsIncludes'],
         select: {
-          occupations: {
-            name: true,
-            yearsExperience: true,
+          occupationsIncludes: {
+            occupation: {
+              name: true,
+            },
             monthsExperience: true,
+            yearsExperience: true,
           },
         },
       });
@@ -58,24 +60,24 @@ export class UserFiltersService {
     }
   }
 
-  public async findAllAddRelations(): Promise<UserEntity[]> {
-    try {
-      return await this.userRepository.find({
-        relations: ['profile', 'occupations'],
-        select: {
-          profile: {
-            name: true,
-            profession: true,
-          },
-          occupations: {
-            name: true,
-            yearsExperience: true,
-            monthsExperience: true,
-          },
-        },
-      });
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
-  }
+  // public async findAllAddRelations(): Promise<UserEntity[]> {
+  //   try {
+  //     return await this.userRepository.find({
+  //       relations: ['profile', 'occupations'],
+  //       select: {
+  //         profile: {
+  //           name: true,
+  //           profession: true,
+  //         },
+  //         occupations: {
+  //           name: true,
+  //           yearsExperience: true,
+  //           monthsExperience: true,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message);
+  //   }
+  // }
 }
