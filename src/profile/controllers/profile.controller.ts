@@ -20,6 +20,13 @@ export class ProfileController {
     return await this.profileService.findAll();
   }
 
+  @Get(':profileId')
+  public async getOneProfile(
+    @Param('profileId') profileId: string,
+  ): Promise<ProfileEntity> {
+    return await this.profileService.findOne(profileId);
+  }
+
   @Delete(':userId')
   public async deleteProfile(@Param('userId') userId: string) {
     return await this.profileService.delete(userId);
