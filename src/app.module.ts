@@ -6,6 +6,7 @@ import { OccupationModule } from './occupation/occupation.module';
 import { SkillModule } from './skill/skill.module';
 import { DataSourceConfig } from './config/data.source';
 import { ConfigModule } from '@nestjs/config';
+import { NetworkModule } from './network/network.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     ProfileModule,
     OccupationModule,
     SkillModule,
+    NetworkModule,
   ],
   controllers: [],
   providers: [],
