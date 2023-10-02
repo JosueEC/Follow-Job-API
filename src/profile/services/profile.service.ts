@@ -43,6 +43,36 @@ export class ProfileService {
     }
   }
 
+  public async save(body: CreateProfileDto): Promise<ProfileEntity> {
+    try {
+      return await this.profileRepository.save(body);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findOne(profileId: string): Promise<ProfileEntity> {
+    try {
+      const profile = await this.profileRepository
+        .createQueryBuilder('profile')
+        .leftJoin('profile.networks', 'networks')
+        .addSelect(['networks.name', 'networks.url'])
+        .where('profile.id = :profileId', { profileId })
+        .getOne();
+
+      if (!profile) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'Profile not found :(',
+        });
+      }
+
+      return profile;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findAll(): Promise<ProfileEntity[]> {
     try {
       return this.profileRepository.find();
@@ -51,9 +81,9 @@ export class ProfileService {
     }
   }
 
-  // Este metodo elimina un registro que tiene relacion
-  // de hijo OneToOne
   public async delete(userId: string): Promise<DeleteResult> {
+    // Este metodo elimina un registro que tiene relacion
+    // de hijo OneToOne
     try {
       // Encontramos los datos del registro con el registro
       // relacionado incluido
