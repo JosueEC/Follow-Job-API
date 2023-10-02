@@ -68,7 +68,10 @@ export class UserService {
         // .select(['user.id AS id', 'user.email AS email', 'user.profile'])
         // Para conectarnos a una relacion OneToOne basta con un leftJoinAndSelect
         // accediendo a la propiedad de conexion y asignando un alias
-        .leftJoinAndSelect('user.profile', 'profile')
+        .leftJoin('user.profile', 'profile')
+        .addSelect(['profile.id', 'profile.name', 'profile.profession'])
+        .leftJoin('profile.networks', 'networks')
+        .addSelect(['networks.id', 'networks.name', 'networks.url'])
         // Para conectarse a une relacion ManyToMany a traves de una tabla
         // intermedia es necesario usar 2 leftJoinAndSelect, el primero conecta
         // con la tabla intermedia y devuelve sus datos y el segundo realiza la
