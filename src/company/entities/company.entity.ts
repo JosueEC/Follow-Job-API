@@ -1,7 +1,7 @@
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 import { ICompany } from '../interfaces/company.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { VacancyEntity } from 'src/vacancy/entities/vacancy.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
 @Entity({ name: 'company' })
 export class CompanyEntity extends BaseEntity implements ICompany {

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { ILocation } from '../interfaces/location.interface';
-import { VacancyEntity } from 'src/vacancy/entities/vacancy.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
 @Entity({ name: 'location' })
 export class LocationEntity extends BaseEntity implements ILocation {

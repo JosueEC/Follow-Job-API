@@ -3,7 +3,7 @@ import { BaseEntity } from '../../config/base.entity';
 import { INetwork } from '../interfaces/network.interface';
 import { SocialNetwork } from '../enums/social-network.enum';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
-import { VacancyEntity } from 'src/vacancy/entities/vacancy.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
 @Entity({ name: 'network' })
 export class NetworkEntity extends BaseEntity implements INetwork {

@@ -1,7 +1,7 @@
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 import { IJob } from '../interfaces/job.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { VacancyEntity } from 'src/vacancy/entities/vacancy.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
 @Entity({ name: 'job' })
 export class JobEntity extends BaseEntity implements IJob {

@@ -1,6 +1,6 @@
-import { BaseEntity } from 'src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 import { IColor } from '../interfaces/color.interface';
-import { VacancyEntity } from 'src/vacancy/entities/vacancy.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity({ name: 'color' })
