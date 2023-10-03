@@ -3,6 +3,7 @@ import { IVacancy } from '../interfaces/vacancy.interface';
 import { JobStatus } from '../enums/job-status.enum';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { CompanyEntity } from 'src/company/entities/company.entity';
+import { JobEntity } from 'src/job/entities/job.entity';
 
 @Entity({ name: 'vacancy' })
 export class VacancyEntity extends BaseEntity implements IVacancy {
@@ -37,7 +38,11 @@ export class VacancyEntity extends BaseEntity implements IVacancy {
     onDelete: 'CASCADE',
   })
   company: CompanyEntity;
-  // job: JobEntity
+
+  @ManyToOne(() => JobEntity, (job) => job.vacancies, {
+    onDelete: 'CASCADE',
+  })
+  job: JobEntity;
   // location: LocationEntity
   // color: ColorEntity
   // networks: NetworkEntity []
