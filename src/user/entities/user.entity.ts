@@ -1,8 +1,17 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { IUser } from '../interfaces/user.interface';
 import { BaseEntity } from '../../config/base.entity';
 import { UsersOccupationsEntity } from './users-occupations.entity';
+import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -37,4 +46,13 @@ export class UserEntity extends BaseEntity implements IUser {
     (userOccupation) => userOccupation.user,
   )
   occupationsIncludes: UsersOccupationsEntity[];
+
+  // Esta es la forma basica para establecer una relacion
+  // ManyToMany con typeorm. Esta instruccion es recomendable
+  // colocarla en la tabla "padre" de la relacion. Esto crea
+  // una tabla intermedia que almacena los id's de las
+  // entidades que establecen una relacion
+  @ManyToMany(() => VacancyEntity)
+  @JoinTable()
+  vacancies: VacancyEntity[];
 }
