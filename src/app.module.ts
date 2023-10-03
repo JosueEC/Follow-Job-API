@@ -9,6 +9,9 @@ import { ConfigModule } from '@nestjs/config';
 import { NetworkModule } from './network/network.module';
 import { VacancyModule } from './vacancy/vacancy.module';
 import { CompanyModule } from './company/company.module';
+import { JobModule } from './job/job.module';
+import { LocationModule } from './location/location.module';
+import { ColorModule } from './color/color.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { CompanyModule } from './company/company.module';
     NetworkModule,
     VacancyModule,
     CompanyModule,
+    JobModule,
+    LocationModule,
+    ColorModule,
   ],
   controllers: [],
   providers: [],

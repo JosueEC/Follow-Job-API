@@ -1,20 +1,17 @@
 import { BaseEntity } from '../../config/base.entity';
-import { ICompany } from '../interfaces/company.interface';
+import { IJob } from '../interfaces/job.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
 
-@Entity({ name: 'company' })
-export class CompanyEntity extends BaseEntity implements ICompany {
+@Entity({ name: 'job' })
+export class JobEntity extends BaseEntity implements IJob {
   @Column({
     name: 'name',
     type: 'varchar',
-    length: 255,
-    unique: true,
+    length: 500,
   })
   name: string;
 
-  @OneToMany(() => VacancyEntity, (vacancy) => vacancy.company, {
-    cascade: true,
-  })
+  @OneToMany(() => VacancyEntity, (vacancy) => vacancy.job, { cascade: true })
   vacancies: VacancyEntity[];
 }

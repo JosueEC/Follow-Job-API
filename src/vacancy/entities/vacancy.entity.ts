@@ -1,8 +1,12 @@
 import { BaseEntity } from '../../config/base.entity';
 import { IVacancy } from '../interfaces/vacancy.interface';
 import { JobStatus } from '../enums/job-status.enum';
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { CompanyEntity } from 'src/company/entities/company.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { CompanyEntity } from '../../company/entities/company.entity';
+import { JobEntity } from '../../job/entities/job.entity';
+import { LocationEntity } from '../../location/entities/location.entity';
+import { ColorEntity } from '../../color/entities/color.entity';
+import { NetworkEntity } from '../../network/entities/network.entity';
 
 @Entity({ name: 'vacancy' })
 export class VacancyEntity extends BaseEntity implements IVacancy {
@@ -37,8 +41,24 @@ export class VacancyEntity extends BaseEntity implements IVacancy {
     onDelete: 'CASCADE',
   })
   company: CompanyEntity;
-  // job: JobEntity
-  // location: LocationEntity
-  // color: ColorEntity
-  // networks: NetworkEntity []
+
+  @ManyToOne(() => JobEntity, (job) => job.vacancies, {
+    onDelete: 'CASCADE',
+  })
+  job: JobEntity;
+
+  @ManyToOne(() => LocationEntity, (location) => location.vacancies, {
+    onDelete: 'CASCADE',
+  })
+  location: LocationEntity;
+
+  @ManyToOne(() => ColorEntity, (color) => color.vacancies, {
+    onDelete: 'CASCADE',
+  })
+  color: ColorEntity;
+
+  @OneToMany(() => NetworkEntity, (network) => network.vacancy, {
+    cascade: true,
+  })
+  networks: NetworkEntity[];
 }
