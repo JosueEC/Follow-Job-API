@@ -8,6 +8,7 @@ import { DataSourceConfig } from './config/data.source';
 import { ConfigModule } from '@nestjs/config';
 import { NetworkModule } from './network/network.module';
 import { VacancyModule } from './vacancy/vacancy.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { VacancyModule } from './vacancy/vacancy.module';
     SkillModule,
     NetworkModule,
     VacancyModule,
+    CompanyModule,
   ],
   controllers: [],
   providers: [],
