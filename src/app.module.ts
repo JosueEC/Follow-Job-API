@@ -10,6 +10,7 @@ import { NetworkModule } from './network/network.module';
 import { VacancyModule } from './vacancy/vacancy.module';
 import { CompanyModule } from './company/company.module';
 import { JobModule } from './job/job.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JobModule } from './job/job.module';
     VacancyModule,
     CompanyModule,
     JobModule,
+    LocationModule,
   ],
   controllers: [],
   providers: [],
