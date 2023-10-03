@@ -11,6 +11,7 @@ import { VacancyModule } from './vacancy/vacancy.module';
 import { CompanyModule } from './company/company.module';
 import { JobModule } from './job/job.module';
 import { LocationModule } from './location/location.module';
+import { ColorModule } from './color/color.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { LocationModule } from './location/location.module';
     CompanyModule,
     JobModule,
     LocationModule,
+    ColorModule,
   ],
   controllers: [],
   providers: [],

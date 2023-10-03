@@ -5,6 +5,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { JobEntity } from 'src/job/entities/job.entity';
 import { LocationEntity } from 'src/location/entities/location.entity';
+import { ColorEntity } from 'src/color/entities/color.entity';
 
 @Entity({ name: 'vacancy' })
 export class VacancyEntity extends BaseEntity implements IVacancy {
@@ -49,6 +50,10 @@ export class VacancyEntity extends BaseEntity implements IVacancy {
     onDelete: 'CASCADE',
   })
   location: LocationEntity;
-  // color: ColorEntity
+
+  @ManyToOne(() => ColorEntity, (color) => color.vacancies, {
+    onDelete: 'CASCADE',
+  })
+  color: ColorEntity;
   // networks: NetworkEntity []
 }
