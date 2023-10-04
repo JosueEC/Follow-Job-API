@@ -183,6 +183,8 @@ export class UserService {
   }
 
   public async deleteOne(userId: string): Promise<DeleteResult> {
+    // TODO: Controlar los casos en los que se elimina un usuario que
+    // TODO/ tiene relaciones de occupation, skills y vacancy
     try {
       const userFound = await this.userRepository
         .createQueryBuilder('user')
@@ -196,10 +198,6 @@ export class UserService {
         });
       }
 
-      //TODO/ Probar borrando el profile en lugar del user, dato que
-      //TODO/ se establecio 'CASCADE' en ambos lados, por ende User
-      //TODO/ depende de profile, asi que si es borrado tambien User
-      //TODO/ sera borrado
       const result = await this.userRepository.delete(userId);
 
       if (result.affected === 0) {

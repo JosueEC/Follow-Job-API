@@ -50,13 +50,17 @@ export class UserEntity extends BaseEntity implements IUser {
     // establecer la relacion ya que este dato vendra por defecto
     // con query builder no funciona el eager asi que si hay que
     // hacer uso de un leftJoin
-    cascade: true,
+    cascade: true, // Indica que podemos guardar la relacion
+    // con profile sin necesidad de antes guardar el profile a
+    // traves de un .save, solo bastara con el .save de la entidad
+    // user
   })
   profile: ProfileEntity;
 
   @OneToMany(
     () => UsersOccupationsEntity,
     (userOccupation) => userOccupation.user,
+    { cascade: true },
   )
   occupationsIncludes: UsersOccupationsEntity[];
 
