@@ -16,6 +16,7 @@ export class SkillEntity extends BaseEntity implements ISkill {
   @OneToMany(
     () => OccupationsSkillsEntity,
     (occupationsSkills) => occupationsSkills.skill,
+    { cascade: true },
   )
   occupationsIncludes: OccupationsSkillsEntity[];
 }
