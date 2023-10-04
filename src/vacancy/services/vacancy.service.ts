@@ -69,6 +69,7 @@ export class VacancyService {
         });
       }
 
+      // TODO: Eliminar la vacante de forma manueal
       user.vacancies = [...user.vacancies].filter((vacancy) => {
         return vacancy.id !== vacancyId;
       });
