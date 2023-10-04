@@ -1,9 +1,9 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { INetwork } from '../interfaces/network.interface';
 import { SocialNetwork } from '../enums/social-network.enum';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
-import { VacancyEntity } from '../../vacancy/entities/vacancy.entity';
+import { CompanyEntity } from '../../company/entities/company.entity';
 
 @Entity({ name: 'network' })
 export class NetworkEntity extends BaseEntity implements INetwork {
@@ -23,10 +23,18 @@ export class NetworkEntity extends BaseEntity implements INetwork {
   @ManyToOne(() => ProfileEntity, (profile) => profile.networks, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({
+    name: 'profile_id',
+    referencedColumnName: 'id',
+  })
   profile: ProfileEntity;
 
-  @ManyToOne(() => VacancyEntity, (vacancy) => vacancy.networks, {
+  @ManyToOne(() => CompanyEntity, (company) => company.networks, {
     onDelete: 'CASCADE',
   })
-  vacancy: VacancyEntity;
+  @JoinColumn({
+    name: 'company_id',
+    referencedColumnName: 'id',
+  })
+  company: CompanyEntity;
 }
