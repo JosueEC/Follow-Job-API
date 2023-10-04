@@ -11,6 +11,34 @@ export class UserFiltersService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
+  public async findOneAddVacancies(userId: string): Promise<UserEntity> {
+    try {
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoin('user.vacancies', 'vacancies')
+        .addSelect([
+          'vacancies.id',
+          'vacancies.postUrl',
+          'vacancies.salary',
+          'vacancies.description',
+          'vacancies.status',
+        ])
+        .where('user.id = :userId', { userId })
+        .getOne();
+
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found :(',
+        });
+      }
+
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findAllAddProfile(): Promise<UserEntity[]> {
     try {
       return await this.userRepository.find({

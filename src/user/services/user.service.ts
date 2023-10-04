@@ -49,6 +49,27 @@ export class UserService {
     }
   }
 
+  public async findOneBasic(userId: string): Promise<UserEntity> {
+    try {
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :userId', { userId })
+        .getOne();
+
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found :(',
+        });
+      }
+
+      return user;
+    } catch (error) {
+      console.info(error);
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findOne(id: string): Promise<UserEntity> {
     //* NOTA: Para conectarnos a alguna otra tabla a traves de query builder
     //* podemos usar leftJoinAndSelect, el cual se conectara y por defecto
@@ -90,6 +111,14 @@ export class UserService {
         .addSelect(['skillsIncludes.id', 'skillsIncludes.level'])
         .leftJoin('skillsIncludes.skill', 'skill')
         .addSelect(['skill.id', 'skill.name'])
+        .leftJoin('user.vacancies', 'vacancies')
+        .addSelect([
+          'vacancies.id',
+          'vacancies.postUrl',
+          'vacancies.salary',
+          'vacancies.description',
+          'vacancies.status',
+        ])
         // Esta forma en la que se usa el where es para evitar
         // los ataques por inyeccion SQL
         .where('user.id = :userId', { userId: id })
@@ -167,6 +196,10 @@ export class UserService {
         });
       }
 
+      //TODO/ Probar borrando el profile en lugar del user, dato que
+      //TODO/ se establecio 'CASCADE' en ambos lados, por ende User
+      //TODO/ depende de profile, asi que si es borrado tambien User
+      //TODO/ sera borrado
       const result = await this.userRepository.delete(userId);
 
       if (result.affected === 0) {
