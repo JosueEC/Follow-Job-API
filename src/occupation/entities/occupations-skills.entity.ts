@@ -1,7 +1,7 @@
 import { LevelSkill } from '../../skill/enums';
 import { OccupationEntity } from './occupation.entity';
 import { SkillEntity } from '../../skill/entities';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 
 @Entity({ name: 'occupations_skills' })
@@ -14,12 +14,20 @@ export class OccupationsSkillsEntity extends BaseEntity {
   })
   level: LevelSkill;
 
+  //* NOTA: Para el caso de skill y occupation no agregamos la propiedad
+  //* onDelete, dado que deseamos conservar los datos de las skills y
+  //* las ocupaciones aunque las relaciones entre ellas sean eliminadas
   @ManyToOne(() => OccupationEntity, (occupation) => occupation.skillsIncludes)
+  @JoinColumn({
+    name: 'occupation_id',
+    referencedColumnName: 'id',
+  })
   occupation: OccupationEntity;
 
-  // Para el caso de skill y occupation, no agregamos la opcion onDelete, esto es
-  // porque deseamos conservar las skills y occupations aunque se borre la ocupacion
-  // esto porque las skills creadas nos sirven para las demas ocupaiones
   @ManyToOne(() => SkillEntity, (skill) => skill.occupationsIncludes)
+  @JoinColumn({
+    name: 'skill_id',
+    referencedColumnName: 'id',
+  })
   skill: SkillEntity;
 }
