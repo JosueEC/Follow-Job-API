@@ -15,14 +15,16 @@ export class OccupationEntity extends BaseEntity implements IOccupation {
   name: string;
 
   @OneToMany(
-    () => OccupationsSkillsEntity,
-    (occupationsSkill) => occupationsSkill.occupation,
-  )
-  skillsIncludes: OccupationsSkillsEntity[];
-
-  @OneToMany(
     () => UsersOccupationsEntity,
     (userOccupation) => userOccupation.occupation,
+    { cascade: true },
   )
   usersIncludes: UsersOccupationsEntity[];
+
+  @OneToMany(
+    () => OccupationsSkillsEntity,
+    (occupationsSkill) => occupationsSkill.occupation,
+    { cascade: true },
+  )
+  skillsIncludes: OccupationsSkillsEntity[];
 }

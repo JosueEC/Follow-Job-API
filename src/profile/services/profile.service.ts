@@ -29,13 +29,19 @@ export class ProfileService {
         });
       }
 
-      const profileCreated = this.profileRepository.create(body);
+      const newProfile = this.profileRepository.create(body);
       // Esta accion ya no es necesaria, debido a que habilitamos la opcion
       // cascade en la relacion
       // const profileSaved = await this.profileRepository.save(profileCreated);
 
-      userFound.profile = profileCreated;
-      await this.userService.save(userFound);
+      // La accion de relacion se hace al reves, ahora asignamos
+      // el user al profile, dado que profile tiene el decorador
+      // @JoinColumn y este el que almacenara el user_id para la
+      // referencia, de esta forma cuando eliminemos al user ahora
+      // si podemos usar onDelete: 'CASCADE' para que tambien se
+      // elimine el profile, ya que este depende del user
+      newProfile.user = userFound;
+      await this.profileRepository.save(newProfile);
 
       return this.userService.findOne(userId);
     } catch (error) {

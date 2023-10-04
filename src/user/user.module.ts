@@ -20,6 +20,6 @@ import { UsersOccupationsEntity } from './entities/users-occupations.entity';
   // exports, aqui solo exportamos el service, pero en el modulo donde vayamos
   // a hacer uso del UserService se debe agreagr el UserModule completo al array
   // de imports
-  exports: [UserService],
+  exports: [UserService, UserFiltersService],
 })
 export class UserModule {}
