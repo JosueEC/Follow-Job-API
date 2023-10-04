@@ -14,17 +14,12 @@ export class OccupationsSkillsEntity extends BaseEntity {
   })
   level: LevelSkill;
 
-  @ManyToOne(
-    () => OccupationEntity,
-    (occupation) => occupation.skillsIncludes,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne(() => OccupationEntity, (occupation) => occupation.skillsIncludes)
   occupation: OccupationEntity;
 
-  @ManyToOne(() => SkillEntity, (skill) => skill.occupationsIncludes, {
-    onDelete: 'CASCADE',
-  })
+  // Para el caso de skill y occupation, no agregamos la opcion onDelete, esto es
+  // porque deseamos conservar las skills y occupations aunque se borre la ocupacion
+  // esto porque las skills creadas nos sirven para las demas ocupaiones
+  @ManyToOne(() => SkillEntity, (skill) => skill.occupationsIncludes)
   skill: SkillEntity;
 }
