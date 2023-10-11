@@ -6,6 +6,7 @@ import { UserEntity } from './entities/user.entity';
 import { IsEmailNotRegisteredConstraint } from './decorators/is-email-not-registered';
 import { UserFiltersService } from './services/filters.service';
 import { UsersOccupationsEntity } from './entities/users-occupations.entity';
+import { OccupationsSkillsEntity } from 'src/occupation/entities/occupations-skills.entity';
 
 @Global()
 @Module({
@@ -13,7 +14,13 @@ import { UsersOccupationsEntity } from './entities/users-occupations.entity';
   // se debe pasar al TypeOrmModule en los modulos que estan conectados a traves
   // de esta tabla, en este caso la entidad UsersOccupationsEntity tambien esta
   // agregada en el modulo de Occupation
-  imports: [TypeOrmModule.forFeature([UserEntity, UsersOccupationsEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      UserEntity,
+      UsersOccupationsEntity,
+      OccupationsSkillsEntity,
+    ]),
+  ],
   controllers: [UserController],
   providers: [UserService, UserFiltersService, IsEmailNotRegisteredConstraint],
   // Cuando queremos exportar algo de nuestro modulo lo agregamos al array de
