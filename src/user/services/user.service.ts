@@ -5,12 +5,18 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { ErrorManager } from '../../utils/error.manager';
+import { UsersOccupationsEntity } from '../entities/users-occupations.entity';
+import { OccupationsSkillsEntity } from 'src/occupation/entities/occupations-skills.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UsersOccupationsEntity)
+    private readonly usersOccupationsRepository: Repository<UsersOccupationsEntity>,
+    @InjectRepository(OccupationsSkillsEntity)
+    private readonly occupationsSkillsRepository: Repository<OccupationsSkillsEntity>,
   ) {}
 
   public async create(body: CreateUserDto): Promise<UserEntity> {
@@ -183,27 +189,80 @@ export class UserService {
   }
 
   public async deleteOne(userId: string): Promise<DeleteResult> {
-    // TODO: Controlar los casos en los que se elimina un usuario que
-    // TODO/ tiene relaciones de occupation, skills y vacancy
+    // Esta funcion elimina un registro que tiene multiples relaciones con
+    // otras tablas
     try {
-      const userFound = await this.userRepository
+      // Primero verificamos que el usuario que se intenta eliminar
+      // realmente exista
+      const user = await this.userRepository
         .createQueryBuilder('user')
         .where('user.id = :userId', { userId })
         .getOne();
 
-      if (!userFound) {
+      if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found : (',
         });
       }
 
+      // Primero eliminamos la relacion entre user y occupation. Solo
+      // eliminamos la relacion ya que deseamos conservar el registro
+      // de la occupation
+      const occupationRelation = await this.usersOccupationsRepository
+        .createQueryBuilder('users_occupations')
+        .where('users_occupations.user_id = :userId', { userId: user.id })
+        .getOne();
+
+      this.usersOccupationsRepository
+        .delete(occupationRelation.id)
+        .then((deleteRelationResult) => {
+          if (deleteRelationResult.affected === 0) {
+            throw new ErrorManager({
+              type: 'NOT_MODIFIED',
+              message:
+                'Something went wrong when I try to delete the relation between user and occupation',
+            });
+          }
+        })
+        .catch((error) => {
+          throw error;
+        });
+
+      // TODO: Probar el funcionamiento de esta seccion, aun no elimina las relaciones con occupation y skill
+      const skillsRows = await this.occupationsSkillsRepository
+        .createQueryBuilder('occupations_skills')
+        .where('occupations_skills.occupation_id = :occupationId', {
+          occupationId: occupationRelation.occupation.id,
+        })
+        .addSelect(['id'])
+        .getMany();
+
+      this.occupationsSkillsRepository
+        .createQueryBuilder('occupations_skills')
+        .delete()
+        .from(OccupationsSkillsEntity)
+        .where('occupations_skills.id IN (:...ids)', { ids: skillsRows })
+        .execute()
+        .then((deleteResult) => {
+          if (deleteResult.affected === 0) {
+            throw new ErrorManager({
+              type: 'NOT_MODIFIED',
+              message:
+                'Something went wrong when I try to delete the relations between Occupation and Skill',
+            });
+          }
+        })
+        .catch((error) => {
+          throw error;
+        });
+
       const result = await this.userRepository.delete(userId);
 
       if (result.affected === 0) {
         throw new ErrorManager({
           type: 'NOT_MODIFIED',
-          message: 'Something went wrong, try it later',
+          message: 'Something went wrong when I try to delete the user',
         });
       }
 
