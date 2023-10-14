@@ -9,6 +9,7 @@ import { UsersOccupationsEntity } from 'src/user/entities/users-occupations.enti
 import { UserEntity } from 'src/user/entities/user.entity';
 import { SkillService } from 'src/skill/services/skill.service';
 import { CreateOccupationSkillDto } from '../dto/create-occupation-skill.dto';
+import { CreateOccupationDto } from '../dto/create-occupation.dto';
 
 @Injectable()
 export class OccupationService {
@@ -29,8 +30,6 @@ export class OccupationService {
   ): Promise<UserEntity> {
     try {
       const user = await this.userService.findOne(userId);
-      const occupation = await this.occupationRepository.save(body.occupation);
-      const skills = body.skills;
 
       if (!user) {
         throw new ErrorManager({
@@ -38,6 +37,10 @@ export class OccupationService {
           message: 'User not found :(',
         });
       }
+
+      const occupation = await this.findOrSave(body.occupation);
+
+      const skills = body.skills;
 
       await this.userOccupationsRepository.save({
         user,
@@ -61,6 +64,27 @@ export class OccupationService {
       return this.userService.findOne(userId);
     } catch (error) {
       console.info(error);
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findOrSave(
+    body: CreateOccupationDto,
+  ): Promise<OccupationEntity> {
+    try {
+      const occupation = await this.occupationRepository
+        .createQueryBuilder('occupation')
+        .where('occupation.name = :occupationName', {
+          occupationName: body.name,
+        })
+        .getOne();
+
+      if (occupation) {
+        return occupation;
+      }
+
+      return await this.occupationRepository.save(body);
+    } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
