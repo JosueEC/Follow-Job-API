@@ -209,13 +209,15 @@ export class UserService {
       // Primero eliminamos la relacion entre user y occupation. Solo
       // eliminamos la relacion ya que deseamos conservar el registro
       // de la occupation
-      const occupationRelation = await this.usersOccupationsRepository
+      const { id, occupation } = await this.usersOccupationsRepository
         .createQueryBuilder('users_occupations')
+        .leftJoin('users_occupations.occupation', 'occupation')
+        .addSelect(['occupation.id'])
         .where('users_occupations.user_id = :userId', { userId: user.id })
         .getOne();
 
       this.usersOccupationsRepository
-        .delete(occupationRelation.id)
+        .delete(id)
         .then((deleteRelationResult) => {
           if (deleteRelationResult.affected === 0) {
             throw new ErrorManager({
@@ -229,15 +231,31 @@ export class UserService {
           throw error;
         });
 
-      // TODO: Probar el funcionamiento de esta seccion, aun no elimina las relaciones con occupation y skill
+      // Este metodo obtiene solo los id's de los registros de la relacion
+      // entre occupation y skill
       const skillsRows = await this.occupationsSkillsRepository
         .createQueryBuilder('occupations_skills')
         .where('occupations_skills.occupation_id = :occupationId', {
-          occupationId: occupationRelation.occupation.id,
+          occupationId: occupation.id,
         })
-        .addSelect(['id'])
-        .getMany();
+        .getMany()
+        .then((response) => {
+          // Usamos un for each para recorrer la response y obtener solo
+          // los id's ya que la response es un arreglo que contiene
+          // objetos de tipo OccupationSkillEntity
+          const ids = [];
 
+          for (const item of response) {
+            ids.push(item.id);
+          }
+
+          return ids;
+        });
+
+      console.info('skillsRows', skillsRows);
+
+      // Esta funcion nos permite eliminar varios registros en una
+      // sola operacion
       this.occupationsSkillsRepository
         .createQueryBuilder('occupations_skills')
         .delete()
@@ -257,6 +275,8 @@ export class UserService {
           throw error;
         });
 
+      // Una vez borradas todas las relaciones solo basta con eliminar al usuario
+      // y con esta ya estaria terminada toda la operacion
       const result = await this.userRepository.delete(userId);
 
       if (result.affected === 0) {
