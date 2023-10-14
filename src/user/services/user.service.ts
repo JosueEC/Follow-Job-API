@@ -5,12 +5,18 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { ErrorManager } from '../../utils/error.manager';
+import { UsersOccupationsEntity } from '../entities/users-occupations.entity';
+import { OccupationsSkillsEntity } from 'src/occupation/entities/occupations-skills.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UsersOccupationsEntity)
+    private readonly usersOccupationsRepository: Repository<UsersOccupationsEntity>,
+    @InjectRepository(OccupationsSkillsEntity)
+    private readonly occupationsSkillsRepository: Repository<OccupationsSkillsEntity>,
   ) {}
 
   public async create(body: CreateUserDto): Promise<UserEntity> {
@@ -183,27 +189,100 @@ export class UserService {
   }
 
   public async deleteOne(userId: string): Promise<DeleteResult> {
-    // TODO: Controlar los casos en los que se elimina un usuario que
-    // TODO/ tiene relaciones de occupation, skills y vacancy
+    // Esta funcion elimina un registro que tiene multiples relaciones con
+    // otras tablas
     try {
-      const userFound = await this.userRepository
+      // Primero verificamos que el usuario que se intenta eliminar
+      // realmente exista
+      const user = await this.userRepository
         .createQueryBuilder('user')
         .where('user.id = :userId', { userId })
         .getOne();
 
-      if (!userFound) {
+      if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found : (',
         });
       }
 
+      // Primero eliminamos la relacion entre user y occupation. Solo
+      // eliminamos la relacion ya que deseamos conservar el registro
+      // de la occupation
+      const { id, occupation } = await this.usersOccupationsRepository
+        .createQueryBuilder('users_occupations')
+        .leftJoin('users_occupations.occupation', 'occupation')
+        .addSelect(['occupation.id'])
+        .where('users_occupations.user_id = :userId', { userId: user.id })
+        .getOne();
+
+      this.usersOccupationsRepository
+        .delete(id)
+        .then((deleteRelationResult) => {
+          if (deleteRelationResult.affected === 0) {
+            throw new ErrorManager({
+              type: 'NOT_MODIFIED',
+              message:
+                'Something went wrong when I try to delete the relation between user and occupation',
+            });
+          }
+        })
+        .catch((error) => {
+          throw error;
+        });
+
+      // Este metodo obtiene solo los id's de los registros de la relacion
+      // entre occupation y skill
+      const skillsRows = await this.occupationsSkillsRepository
+        .createQueryBuilder('occupations_skills')
+        .where('occupations_skills.occupation_id = :occupationId', {
+          occupationId: occupation.id,
+        })
+        .getMany()
+        .then((response) => {
+          // Usamos un for each para recorrer la response y obtener solo
+          // los id's ya que la response es un arreglo que contiene
+          // objetos de tipo OccupationSkillEntity
+          const ids = [];
+
+          for (const item of response) {
+            ids.push(item.id);
+          }
+
+          return ids;
+        });
+
+      console.info('skillsRows', skillsRows);
+
+      // Esta funcion nos permite eliminar varios registros en una
+      // sola operacion
+      this.occupationsSkillsRepository
+        .createQueryBuilder('occupations_skills')
+        .delete()
+        .from(OccupationsSkillsEntity)
+        .where('occupations_skills.id IN (:...ids)', { ids: skillsRows })
+        .execute()
+        .then((deleteResult) => {
+          if (deleteResult.affected === 0) {
+            throw new ErrorManager({
+              type: 'NOT_MODIFIED',
+              message:
+                'Something went wrong when I try to delete the relations between Occupation and Skill',
+            });
+          }
+        })
+        .catch((error) => {
+          throw error;
+        });
+
+      // Una vez borradas todas las relaciones solo basta con eliminar al usuario
+      // y con esta ya estaria terminada toda la operacion
       const result = await this.userRepository.delete(userId);
 
       if (result.affected === 0) {
         throw new ErrorManager({
           type: 'NOT_MODIFIED',
-          message: 'Something went wrong, try it later',
+          message: 'Something went wrong when I try to delete the user',
         });
       }
 
