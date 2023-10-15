@@ -9,6 +9,6 @@ import { ProfileModule } from 'src/profile/profile.module';
   imports: [TypeOrmModule.forFeature([NetworkEntity]), ProfileModule],
   controllers: [NetworkController],
   providers: [NetworkService],
-  exports: [],
+  exports: [NetworkService],
 })
 export class NetworkModule {}

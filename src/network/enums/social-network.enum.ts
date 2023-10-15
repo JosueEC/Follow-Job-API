@@ -1,5 +1,5 @@
 export enum SocialNetwork {
-  LINKEDIN = 'LinkedIn',
-  GITHUB = 'GitHub',
-  WEBSITE = 'Website',
+  LINKEDIN = 'LINKEDIN',
+  GITHUB = 'GITHUB',
+  WEBSITE = 'WEBSITE',
 }
