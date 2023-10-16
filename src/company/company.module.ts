@@ -9,6 +9,6 @@ import { NetworkModule } from 'src/network/network.module';
   imports: [TypeOrmModule.forFeature([CompanyEntity]), NetworkModule],
   controllers: [CompanyController],
   providers: [CompanyService],
-  exports: [],
+  exports: [CompanyService],
 })
 export class CompanyModule {}
