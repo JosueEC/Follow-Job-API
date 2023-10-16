@@ -1,18 +1,11 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsUrl,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 import { INetwork } from '../interfaces/network.interface';
+import { SocialNetwork } from '../enums/social-network.enum';
 
 export class CreateNetworkDto implements INetwork {
   @IsNotEmpty()
-  @IsString()
-  @MinLength(1)
-  @MaxLength(255)
-  name: string;
+  @IsEnum(SocialNetwork)
+  name: SocialNetwork;
 
   @IsNotEmpty()
   @IsString()
